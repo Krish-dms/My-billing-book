@@ -1,0 +1,927 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vyapar Clone - Business Accounting</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-calculator"></i>
+                <h1>Vyapar Clone</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#invoices"><i class="fas fa-file-invoice"></i> Invoices</a></li>
+                    <li><a href="#inventory"><i class="fas fa-boxes"></i> Inventory</a></li>
+                    <li><a href="#customers"><i class="fas fa-users"></i> Customers</a></li>
+                    <li><a href="#reports"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <img src="https://via.placeholder.com/40" alt="User">
+                <span>John Doe</span>
+            </div>
+        </header>
+
+        <main>
+            <section id="dashboard" class="active-section">
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h3>Total Revenue</h3>
+                        <p id="total-revenue">₹0</p>
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Pending Invoices</h3>
+                        <p id="pending-invoices">0</p>
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Customers</h3>
+                        <p id="total-customers">0</p>
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Inventory Items</h3>
+                        <p id="inventory-items">0</p>
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                </div>
+
+                <div class="recent-activity">
+                    <h2>Recent Invoices</h2>
+                    <table id="recent-invoices">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Filled by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="invoices">
+                <div class="section-header">
+                    <h2>Invoices</h2>
+                    <button id="new-invoice-btn" class="primary-btn">
+                        <i class="fas fa-plus"></i> New Invoice
+                    </button>
+                </div>
+                <!-- Invoice list will be populated by JavaScript -->
+                <div class="invoice-list" id="invoice-list">
+                    <!-- Dynamic content -->
+                </div>
+            </section>
+
+            <section id="inventory">
+                <div class="section-header">
+                    <h2>Inventory</h2>
+                    <button id="add-item-btn" class="primary-btn">
+                        <i class="fas fa-plus"></i> Add Item
+                    </button>
+                </div>
+                <table id="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Filled by JavaScript -->
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="customers">
+                <div class="section-header">
+                    <h2>Customers</h2>
+                    <button id="add-customer-btn" class="primary-btn">
+                        <i class="fas fa-plus"></i> Add Customer
+                    </button>
+                </div>
+                <table id="customers-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Filled by JavaScript -->
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="reports">
+                <h2>Reports</h2>
+                <div class="report-filters">
+                    <div class="filter-group">
+                        <label for="report-type">Report Type:</label>
+                        <select id="report-type">
+                            <option value="sales">Sales Report</option>
+                            <option value="inventory">Inventory Report</option>
+                            <option value="customer">Customer Report</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="date-range">Date Range:</label>
+                        <select id="date-range">
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month" selected>This Month</option>
+                            <option value="year">This Year</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <button id="generate-report-btn" class="primary-btn">
+                        Generate Report
+                    </button>
+                </div>
+                <div class="report-results" id="report-results">
+                    <!-- Report results will be displayed here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Modals -->
+        <div id="invoice-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2>Create New Invoice</h2>
+                <form id="invoice-form">
+                    <div class="form-group">
+                        <label for="customer-select">Customer</label>
+                        <select id="customer-select" required>
+                            <option value="">Select Customer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="invoice-date">Date</label>
+                        <input type="date" id="invoice-date" required>
+                    </div>
+                    <div class="invoice-items">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoice-items-list">
+                                <!-- Invoice items will be added here -->
+                            </tbody>
+                        </table>
+                        <button type="button" id="add-item-to-invoice" class="secondary-btn">
+                            <i class="fas fa-plus"></i> Add Item
+                        </button>
+                    </div>
+                    <div class="invoice-totals">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span id="invoice-subtotal">₹0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Tax (18%):</span>
+                            <span id="invoice-tax">₹0.00</span>
+                        </div>
+                        <div class="total-row grand-total">
+                            <span>Total:</span>
+                            <span id="invoice-total">₹0.00</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="primary-btn">Save Invoice</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Similar modals for inventory and customer would be here -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html><style>/* Global Styles */
+:root {
+    --primary-color: #4a6bff;
+    --secondary-color: #f8f9fa;
+    --accent-color: #ff6b6b;
+    --text-color: #333;
+    --light-text: #777;
+    --border-color: #e0e0e0;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: var(--text-color);
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Header Styles */
+header {
+    width: 250px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.logo i {
+    font-size: 24px;
+    color: var(--primary-color);
+    margin-right: 10px;
+}
+
+.logo h1 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+nav ul {
+    list-style: none;
+    margin-bottom: 30px;
+}
+
+nav ul li {
+    margin-bottom: 10px;
+}
+
+nav ul li a {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+nav ul li a i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+nav ul li.active a, nav ul li a:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.user-profile {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--secondary-color);
+}
+
+.user-profile img {
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Main Content Styles */
+main {
+    flex: 1;
+    padding: 20px;
+    background-color: var(--secondary-color);
+}
+
+section {
+    display: none;
+}
+
+section.active-section {
+    display: block;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* Stats Cards */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card h3 {
+    font-size: 14px;
+    color: var(--light-text);
+    margin-bottom: 10px;
+}
+
+.stat-card p {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.stat-card i {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 40px;
+    opacity: 0.2;
+    color: var(--primary-color);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+}
+
+tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Buttons */
+button {
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #3a5bef;
+}
+
+.secondary-btn {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.secondary-btn:hover {
+    background-color: #e9ecef;
+}
+
+.danger-btn {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.danger-btn:hover {
+    background-color: #c82333;
+}
+
+/* Modals */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 20px;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--light-text);
+}
+
+.close-btn:hover {
+    color: var(--text-color);
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.invoice-totals {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.grand-total {
+    font-weight: 600;
+    font-size: 18px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    header {
+        width: 100%;
+        padding: 10px;
+    }
+    
+    nav ul {
+        display: flex;
+        overflow-x: auto;
+        margin-bottom: 15px;
+    }
+    
+    nav ul li {
+        margin-bottom: 0;
+        margin-right: 10px;
+    }
+    
+    .user-profile {
+        margin-top: 0;
+    }
+    
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+}</style><script>document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const navLinks = document.querySelectorAll('nav ul li a');
+    const sections = document.querySelectorAll('main section');
+    const newInvoiceBtn = document.getElementById('new-invoice-btn');
+    const invoiceModal = document.getElementById('invoice-modal');
+    const closeModalBtn = document.querySelector('.close-btn');
+    const addItemToInvoiceBtn = document.getElementById('add-item-to-invoice');
+    const invoiceItemsList = document.getElementById('invoice-items-list');
+    const invoiceForm = document.getElementById('invoice-form');
+    const customerSelect = document.getElementById('customer-select');
+    
+    // Sample data (in a real app, this would come from the backend)
+    let customers = [];
+    let inventory = [];
+    let invoices = [];
+    
+    // Initialize the app
+    initApp();
+    
+    // Navigation
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Update active nav link
+            navLinks.forEach(navLink => navLink.parentElement.classList.remove('active'));
+            this.parentElement.classList.add('active');
+            
+            // Show corresponding section
+            const targetSection = this.getAttribute('href').substring(1);
+            sections.forEach(section => {
+                section.classList.remove('active-section');
+                if (section.id === targetSection) {
+                    section.classList.add('active-section');
+                }
+            });
+            
+            // Load data for the section
+            switch(targetSection) {
+                case 'invoices':
+                    loadInvoices();
+                    break;
+                case 'inventory':
+                    loadInventory();
+                    break;
+                case 'customers':
+                    loadCustomers();
+                    break;
+                case 'reports':
+                    // Load reports if needed
+                    break;
+            }
+        });
+    });
+    
+    // Modal handling
+    newInvoiceBtn.addEventListener('click', () => {
+        invoiceModal.style.display = 'flex';
+    });
+    
+    closeModalBtn.addEventListener('click', () => {
+        invoiceModal.style.display = 'none';
+    });
+    
+    window.addEventListener('click', (e) => {
+        if (e.target === invoiceModal) {
+            invoiceModal.style.display = 'none';
+        }
+    });
+    
+    // Add item to invoice
+    addItemToInvoiceBtn.addEventListener('click', () => {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>
+                <select class="item-select">
+                    <option value="">Select Item</option>
+                    ${inventory.map(item => `<option value="${item.id}">${item.name}</option>`).join('')}
+                </select>
+            </td>
+            <td><input type="number" class="item-quantity" min="1" value="1"></td>
+            <td class="item-price">₹0.00</td>
+            <td class="item-total">₹0.00</td>
+            <td><button type="button" class="danger-btn remove-item-btn"><i class="fas fa-trash"></i></button></td>
+        `;
+        invoiceItemsList.appendChild(newRow);
+        
+        // Add event listeners to the new row
+        const itemSelect = newRow.querySelector('.item-select');
+        const quantityInput = newRow.querySelector('.item-quantity');
+        const priceCell = newRow.querySelector('.item-price');
+        const totalCell = newRow.querySelector('.item-total');
+        const removeBtn = newRow.querySelector('.remove-item-btn');
+        
+        itemSelect.addEventListener('change', function() {
+            const itemId = this.value;
+            const selectedItem = inventory.find(item => item.id == itemId);
+            if (selectedItem) {
+                priceCell.textContent = `₹${selectedItem.price.toFixed(2)}`;
+                calculateItemTotal(quantityInput, selectedItem.price, totalCell);
+            } else {
+                priceCell.textContent = '₹0.00';
+                totalCell.textContent = '₹0.00';
+            }
+        });
+        
+        quantityInput.addEventListener('input', function() {
+            const itemId = newRow.querySelector('.item-select').value;
+            if (itemId) {
+                const selectedItem = inventory.find(item => item.id == itemId);
+                calculateItemTotal(this, selectedItem.price, totalCell);
+            }
+        });
+        
+        removeBtn.addEventListener('click', function() {
+            newRow.remove();
+            calculateInvoiceTotals();
+        });
+    });
+    
+    // Form submission
+    invoiceForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate form
+        if (!customerSelect.value) {
+            alert('Please select a customer');
+            return;
+        }
+        
+        const items = Array.from(invoiceItemsList.querySelectorAll('tr')).map(row => {
+            const itemId = row.querySelector('.item-select').value;
+            const quantity = parseInt(row.querySelector('.item-quantity').value);
+            const price = parseFloat(row.querySelector('.item-price').textContent.substring(1));
+            return { itemId, quantity, price };
+        });
+        
+        if (items.length === 0) {
+            alert('Please add at least one item to the invoice');
+            return;
+        }
+        
+        // Create new invoice
+        const newInvoice = {
+            id: generateId(),
+            customerId: customerSelect.value,
+            date: document.getElementById('invoice-date').value || new Date().toISOString().split('T')[0],
+            items: items,
+            subtotal: parseFloat(document.getElementById('invoice-subtotal').textContent.substring(1)),
+            tax: parseFloat(document.getElementById('invoice-tax').textContent.substring(1)),
+            total: parseFloat(document.getElementById('invoice-total').textContent.substring(1)),
+            status: 'pending'
+        };
+        
+        // Add to invoices array (in a real app, this would be an API call)
+        invoices.push(newInvoice);
+        
+        // Update UI
+        updateDashboardStats();
+        loadInvoices();
+        
+        // Reset form and close modal
+        invoiceForm.reset();
+        invoiceItemsList.innerHTML = '';
+        invoiceModal.style.display = 'none';
+        
+        alert('Invoice created successfully!');
+    });
+    
+    // Helper functions
+    function initApp() {
+        // Load sample data
+        loadSampleData();
+        
+        // Set default section
+        document.querySelector('nav ul li.active a').click();
+        
+        // Set today's date as default for invoice date
+        document.getElementById('invoice-date').valueAsDate = new Date();
+    }
+    
+    function loadSampleData() {
+        // Sample customers
+        customers = [
+            { id: '1', name: 'Retail Customer', phone: '9876543210', email: 'retail@example.com' },
+            { id: '2', name: 'Wholesale Buyer', phone: '9876543211', email: 'wholesale@example.com' },
+            { id: '3', name: 'Corporate Client', phone: '9876543212', email: 'corporate@example.com' }
+        ];
+        
+        // Sample inventory
+        inventory = [
+            { id: '1', name: 'Product A', price: 100, stock: 50 },
+            { id: '2', name: 'Product B', price: 200, stock: 30 },
+            { id: '3', name: 'Product C', price: 150, stock: 20 },
+            { id: '4', name: 'Product D', price: 250, stock: 10 }
+        ];
+        
+        // Sample invoices
+        invoices = [
+            {
+                id: 'INV-001',
+                customerId: '1',
+                date: '2023-06-01',
+                items: [
+                    { itemId: '1', quantity: 2, price: 100 },
+                    { itemId: '2', quantity: 1, price: 200 }
+                ],
+                subtotal: 400,
+                tax: 72,
+                total: 472,
+                status: 'paid'
+            },
+            {
+                id: 'INV-002',
+                customerId: '2',
+                date: '2023-06-05',
+                items: [
+                    { itemId: '3', quantity: 3, price: 150 },
+                    { itemId: '4', quantity: 2, price: 250 }
+                ],
+                subtotal: 950,
+                tax: 171,
+                total: 1121,
+                status: 'pending'
+            }
+        ];
+        
+        // Populate customer dropdown
+        customerSelect.innerHTML = '<option value="">Select Customer</option>' + 
+            customers.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        
+        // Update dashboard stats
+        updateDashboardStats();
+    }
+    
+    function updateDashboardStats() {
+        // Total Revenue
+        const totalRevenue = invoices.reduce((sum, inv) => sum + inv.total, 0);
+        document.getElementById('total-revenue').textContent = `₹${totalRevenue.toFixed(2)}`;
+        
+        // Pending Invoices
+        const pendingInvoices = invoices.filter(inv => inv.status === 'pending').length;
+        document.getElementById('pending-invoices').textContent = pendingInvoices;
+        
+        // Total Customers
+        document.getElementById('total-customers').textContent = customers.length;
+        
+        // Inventory Items
+        document.getElementById('inventory-items').textContent = inventory.length;
+        
+        // Recent Invoices
+        const recentInvoicesTable = document.querySelector('#recent-invoices tbody');
+        recentInvoicesTable.innerHTML = invoices.slice(0, 5).map(inv => {
+            const customer = customers.find(c => c.id === inv.customerId);
+            return `
+                <tr>
+                    <td>${inv.id}</td>
+                    <td>${customer ? customer.name : 'Unknown'}</td>
+                    <td>${inv.date}</td>
+                    <td>₹${inv.total.toFixed(2)}</td>
+                    <td><span class="status-badge ${inv.status}">${inv.status}</span></td>
+                </tr>
+            `;
+        }).join('');
+    }
+    
+    function loadInvoices() {
+        const invoiceList = document.getElementById('invoice-list');
+        invoiceList.innerHTML = invoices.map(inv => {
+            const customer = customers.find(c => c.id === inv.customerId);
+            return `
+                <div class="invoice-card">
+                    <div class="invoice-header">
+                        <span class="invoice-id">${inv.id}</span>
+                        <span class="invoice-status ${inv.status}">${inv.status}</span>
+                    </div>
+                    <div class="invoice-details">
+                        <div>
+                            <span class="detail-label">Customer:</span>
+                            <span>${customer ? customer.name : 'Unknown'}</span>
+                        </div>
+                        <div>
+                            <span class="detail-label">Date:</span>
+                            <span>${inv.date}</span>
+                        </div>
+                        <div>
+                            <span class="detail-label">Amount:</span>
+                            <span>₹${inv.total.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <div class="invoice-actions">
+                        <button class="secondary-btn"><i class="fas fa-eye"></i> View</button>
+                        <button class="secondary-btn"><i class="fas fa-print"></i> Print</button>
+                        <button class="danger-btn"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    function loadInventory() {
+        const inventoryTable = document.querySelector('#inventory-table tbody');
+        inventoryTable.innerHTML = inventory.map(item => `
+            <tr>
+                <td>${item.id}</td>
+                <td>${item.name}</td>
+                <td>₹${item.price.toFixed(2)}</td>
+                <td>${item.stock}</td>
+                <td>
+                    <button class="secondary-btn"><i class="fas fa-edit"></i></button>
+                    <button class="danger-btn"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('');
+    }
+    
+    function loadCustomers() {
+        const customersTable = document.querySelector('#customers-table tbody');
+        customersTable.innerHTML = customers.map(customer => `
+            <tr>
+                <td>${customer.id}</td>
+                <td>${customer.name}</td>
+                <td>${customer.phone}</td>
+                <td>${customer.email}</td>
+                <td>
+                    <button class="secondary-btn"><i class="fas fa-edit"></i></button>
+                    <button class="danger-btn"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('');
+    }
+    
+    function calculateItemTotal(quantityInput, price, totalCell) {
+        const quantity = parseInt(quantityInput.value) || 0;
+        const total = quantity * price;
+        totalCell.textContent = `₹${total.toFixed(2)}`;
+        calculateInvoiceTotals();
+    }
+    
+    function calculateInvoiceTotals() {
+        const rows = invoiceItemsList.querySelectorAll('tr');
+        let subtotal = 0;
+        
+        rows.forEach(row => {
+            const totalText = row.querySelector('.item-total').textContent;
+            subtotal += parseFloat(totalText.substring(1)) || 0;
+        });
+        
+        const tax = subtotal * 0.18; // 18% tax
+        const total = subtotal + tax;
+        
+        document.getElementById('invoice-subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+        document.getElementById('invoice-tax').textContent = `₹${tax.toFixed(2)}`;
+        document.getElementById('invoice-total').textContent = `₹${total.toFixed(2)}`;
+    }
+    
+    function generateId() {
+        return 'INV-' + Math.floor(1000 + Math.random() * 9000);
+    }
+});</script>
